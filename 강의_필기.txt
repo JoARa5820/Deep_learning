@@ -1,0 +1,17 @@
+1. linear regression의 cost function = 통계에서의 SSR
+2. cost function => 제곱의 의미 : 차이가 클 때 더 큰 패널티를 줌 : (f(x) - y)^2
+3. cost function = 평균제곱오차
+4. constanct(상수) 메소드로 '노드' 생성
+5. 텐서 실행은 Session 생성 후 노드 그래프를 실행시키는 방식으로 진행됨
+6. 그래프(노드) 빌드(정의) -> 세션 run -> 결과 return
+7. constant : 고정된 숫자 노드 / placeholder : 미지수를 갖는 노드
+8. placeholder -> 세션 run(실행식 변수, feed_dict) -> 미지수를 feed_dict으로 먹여줌
+9. Rank : 스칼라 -> 벡터 -> 매트릭스 -> 3텐서 -> n텐서
+10. tf.Variable 노드로 가중치(W)와 bias(b) 선언
+11. reduce_mean : 평균 내줌(cost의 1/n * 시그마 부분)
+12. tf.Variable(W,b) 실행시키기 전엔 tf,global_variables_initializer() 실행시켜줘야함
+13. hypothesis(x*W + b), cost(W,b) 그래프 생성 -> X와 Y 값을 feed_dict -> W,b update & value return해서 확인
+
+
+
+# 참고 : github.com/hunkim/DeepLearningZeroToAll
