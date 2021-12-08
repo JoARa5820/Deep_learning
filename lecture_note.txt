@@ -1,3 +1,5 @@
+# 참고 : github.com/hunkim/DeepLearningZeroToAll
+
 1. linear regression의 cost function = 통계에서의 SSR
 2. cost function => 제곱의 의미 : 차이가 클 때 더 큰 패널티를 줌 : (f(x) - y)^2
 3. cost function = 평균제곱오차
@@ -11,7 +13,20 @@
 11. reduce_mean : 평균 내줌(cost의 1/n * 시그마 부분)
 12. tf.Variable(W,b) 실행시키기 전엔 tf,global_variables_initializer() 실행시켜줘야함
 13. hypothesis(x*W + b), cost(W,b) 그래프 생성 -> X와 Y 값을 feed_dict -> W,b update & value return해서 확인
+14. 다항식(=독립변수가 n개/가중치도 n개 = multivariable)을 이용한 hypothesis (X*W)는 매트릭스(행렬 곱)를 통해 표현할 수 있음 : H(X) = XW
+15. 수많은 행(instance)이 존재하더라도 매트릭스(행렬곱)을 이용하면 수식 동일함 : H(X) = XW
+16. X : [n, 3]의 구조를 가질 때, numpy에서는 n개를 -1로 표현하고, tensorflow에서는 None으로 표시함
 
 
 
-# 참고 : github.com/hunkim/DeepLearningZeroToAll
+
+
+
+
+
+
+
+
+
+
+
