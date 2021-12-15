@@ -16,9 +16,7 @@
 14. 다항식(=독립변수가 n개/가중치도 n개 = multivariable)을 이용한 hypothesis (X*W)는 매트릭스(행렬 곱)를 통해 표현할 수 있음 : H(X) = XW
 15. 수많은 행(instance)이 존재하더라도 매트릭스(행렬곱)을 이용하면 수식 동일함 : H(X) = XW
 16. X : [n, 3]의 구조를 가질 때, numpy에서는 n개를 -1로 표현하고, tensorflow에서는 None으로 표시함
-
-
-
+17. cost(W)는  H(x)를 이용하여 cost 함수 값이 최소가 되는 W값을 구하는 함수로, W를 구하기 위해 cost(W) 함수를 미분하면 W = W - 알파*(W에 대해 미분한 cost(W)) 가 되는데 여기서 알파값은 learning_rate임
 
 
 
