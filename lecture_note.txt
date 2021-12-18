@@ -26,6 +26,19 @@
 23. logits(로짓) = tf.matmul(X,W) + b
 - hypothesis = tf.nn.softmax(logits)
 - hypothesis : 확률값
+24. 다층 퍼셉트론(XOR) : 병렬형식의 단층 네트워크(유닛)를 하나의 네트워크(유닛)으로 결합시킨 후 다음 네트워크(유닛)의 X자리에 대입함
+K(X) = sigmoid( X*W1+B1 )
+hat(Y) = H(X) = sigmoid( K(X)*W2 + B2 )
+=> K = tf.sigmoid(tf.matmul(X,W1) + B1)
+hypothesis = tf.sigmoid(tf.matmul(K, W2) + B2)
+25. Partial derivative : 관심있는 항목 외엔 상수로 보고 미분하는 방법
+26. chain rule : 복합함수 미분 : x가 최종적으로 f에 미치는 영향을 구하기 위함 : f(g(x)) 미분 = df/dx = (df/dg * dg/dx)
+27. y 결과값이 0 또는 1일 땐 복잡한 soft_max를 사용할 필요없이 logistic regression을 사용해줌
+28. TensorBoard : 학습을 길게 할 때, 학습의 진행사항을 볼 수 있게 해주는 도구
+step에 따른 cost 값 변화를 그래프로 보여줌
+
+
+
 
 
 
