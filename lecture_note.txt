@@ -36,6 +36,57 @@ hypothesis = tf.sigmoid(tf.matmul(K, W2) + B2)
 27. y 결과값이 0 또는 1일 땐 복잡한 soft_max를 사용할 필요없이 logistic regression을 사용해줌
 28. TensorBoard : 학습을 길게 할 때, 학습의 진행사항을 볼 수 있게 해주는 도구
 step에 따른 cost 값 변화를 그래프로 보여줌
+29. 시그모이드를 사용한 딥네트워크의 경우, 1단에 비해 2~3단의 딥네트워크가 더 잘 작동하지만, 2~3단이 아닌 10단이 되었는데도 결과가 좋지 않은 경우가 있음
+이 경우는 오차역전파법을 통해 생각해보면 되는데, 어떠한 값을 미분 해내려가다보면 중간중간에서 시그모이드 함수를 만나게됨. 이 시그모이드 함수는 해당 값을 0~1 사이의 값으로 변환시켜주게됨, 대부분 0은 아니지만 0에 가까운 값(ex. 0.01)으로 변환되기 때문에 chain rule에 의해 0.01 * 0.01 * 0.01 ... 이 되다보면 아주 작은값이 되버림
+즉, 최종 출력값(Y)에서 2~3단까지는 값이 괜찮지만 네트워크가 깊어질수록 값이 아주 작아지기 때문에 최종 미분값은 0에 가까운 값이 되어버리고 해당 미분값이 출력값(Y)에 영향을 미치지 않는다는 것과 같은 말이 됨
+=> 기울기(경사도)가 사라짐 = 학습이 안됨 = Vanishing gradient
+=> 해결법 : sigmoid 대신 ReLU(또는 Leaky ReLU) 사용 : 0보다 작으면 0, 0보다 크면 값에 비례해서 증가
+=> 더 이상 시그모이드 사용X, ReLU 사용O, 하지만 출력값은 0~1 사이의 값으로 나와야하므로 학습 마지막 단은 시그모이드 사용
+(종류 : maxout / ReLU / VLReLU / tanh / Sigmoid)
+30. 최적의 Weight 값 구하는 방법 :
+Forward의 X * W = Y 값과 Backward의 Y = W * X의 값을 구해서, Forward의 X값과 Backward의 hat(X)값 간의 차이가 가장 작아지는 W 값을 구하면 됨 : RBM : Xavier initialization
+=> Forward(=encoder) / Backward(=decoder) 라고도 함
+* RBM 쓴 것과 비슷하게 W 값을 잘 설정하는 방법 : 
+# Glorot et al. 2010
+W = np.random.randn(fan_in, fan_out) / np.sqrt(fan_in)
+# He et al. 2015
+W = np.random.randn(fan_in, fan_out) / np.sqrt(fan_in/2)
+31. Overfitting 줄이는 방법 :
+(1) More training data : 많은 학습데이터
+(2) Reduce the number of features : 속성 수 줄이기(딥러닝에서는 안해도 됨)
+(3) Regularization : 정규화
+- cost + learning_rate * sigma(W^2)
+: learning_rate 값에 따라 중요도 결정됨(0.01 : 어느정도 중요 / 0.1 : 중요)
+: sigma(W^2) 값이 최소가 되는 W 값 결정
+: L2reg = 0.001 * tf.reduce_sum(tf.square(W)) :  
+(4) Dropout : 랜덤하게 노드를 끊어버림 : 학습할떄만 drop out 해줌 : dropout_rate 값 설정
+# Train
+sess.run(optimizer, feed_dict = {X : batch_xs, Y : batch_ys, dropout_rate : 0.7})
+# EVALUATION :
+print "Accuracy : ", accuracy.eval({X : mnist.test.images, Y : mnist.test.labels, dropout_rate : 1})
+32. Optimizers
+- 이전엔 GradientDescentOptimizer를 사용함
+train = tf.train.GradientDescentOptimizer(learning_rate = 0.1).minimize(cost)
+- 하지만 Optimizers에는 여러 종류가 있음
+(1) tf.train.AdadeltaOptimizer
+(2) tf.train.AdagradOptimizer
+(3) tf.train.AdagradDAOptimizer
+(4) tf.train.MomentumOptimizer
+(5) tf.train.AdamOptimizer
+(6) tf.train.FtrlOptimizer
+(7) tf.train.ProximalGradientDescentOptimizer
+(8) tf.train.ProximalAdagradOptimizer
+(9) tf.train.RMSPropOptimizer
+- 위 결과에 대한 시뮬레이션 : http://www.denizyuret.com/2015/03/alec-radfords-animations-for.html
+- 하지만 통상적으로 Adam Optimizer가 가장 나음
+# GradientDescentOptimizer를 AdamOptimizer으로만 바꿔주면 됨
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = hypothesis, labels = Y))
+optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost)
+
+
+
+
+
 
 
 
