@@ -82,12 +82,40 @@ train = tf.train.GradientDescentOptimizer(learning_rate = 0.1).minimize(cost)
 # GradientDescentOptimizer를 AdamOptimizer으로만 바꿔주면 됨
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = hypothesis, labels = Y))
 optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost)
-
-
-
-
-
-
+33. CNN (Convolution layer)
+- 필터 : 전체 이미지의 한번에 받지 않고, 일부만 가져와서 받아오는 것
+- 32*32*3 image와 5*5*3 filter의 마지막 값(색깔 : 3)은 동일함
+- 필터의 크기(5*5)는 본인이 정의할 수 있음 : 한번에 얼마만큼 보고싶은지?
+- 필터는 하나의 값을 만들어냄 : Wx + b 식 이용
+- 7*7 input에서 (3*3 filter + stride : 1)을 사용하면, 5*5 output(image)이 나옴
+- 7*7 input에서 (3*3 filter + stride : 2)을 사용하면, 3*3 output(image)이 나옴
+- N * N image에서 필터 사이즈가 F * F 일 때, 몇개의 Output size로 출력될 것인가?
+* Output size =  (N - F) / stride + 1
+(N : 이미지의 가로세로 길이, F : 필터의 가로세로 길이, stride : 옆으로 몇칸 움직일 것인지?)
+=> 필터를 이용해서 output을 생성하면 이미지의 크기가 작아짐 = 정보를 잃어버림(= 합성곱 네트워크를 사용할 때는 pad를 사용함)
+34. pad : image의 테두리를 0으로 두름
+* pad 사용 이유 :
+(1) 그림이 급격하게 작아지는 것 방지
+(2) 모서리 부분을 네트워크에 알려주는 역할
+=> 7*7 image에 pad 적용 -> 9*9
+9*9 image에 (3*3 filter, stride : 1) 적용 : 식에 의해 9-3/1 +1 = 6 + 1 = 7로 7*7 image가 output으로 나옴
+즉, 7*7 image에 pad를 적용한 후 (3*3 filter, stride : 1) 적용하면 그대로 7*7 image가 output 값이 됨
+35. 32*32*3 image -> 5*5*3인 6개의 filter -> 이 6개의 filter는 각각의 W이 다르기 때문에 각각 차이가 있을 것이고, 이 6개의 filter를 Convolution Layer로 합치게 되면 activation maps이 됨
+이 activation maps은 pad를 적용하지 않았다는 가정하에 (28, 28, 6)이 됨
+=> Output size : (32-5)/1 + 1 = 27/1 + 1 = 28
+     filter 개수 = 6
+즉, 정리하자면 image에 filter 처리해서 conv layer를 만든 것, 깊이는 몇개의 필터를 사용하느냐에 따라 달라짐
+36. Pooling layer : Sampling이라고 보면 됨
+Max Pooling : 각 filter에서 가장 큰 값을 추출함
+Max Pooling한 값을 모아서 새로운 output을 만듦
+(이때, output의 사이즈는 filter의 크기(n*n)와 stride 값에 따라 달라짐)
+37. Fully Connected Layer (FC layer)의 구성 예시 :
+* CONV - RELU - CONV - RELU - POOL - CONV - RELU - CONV - RELU - POOL - CONV - RELU - CONV - RELU - POOL
+* 마지막은 POOL로 마무리함
+* output 결과가 3*3*10이라면 깊이가 10이라는 뜻
+38. Fully Connected Layer(FC layer) 어떻게 동작하는지 & 각각의 layer가 어떻게 동작하는지 확인 : http://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html
+39. CONV - POOL - NORM(Normalization layer)
+: NORM은 굳이 안해줘도 됨 / 하나 안하나 비슷함
 
 
 
